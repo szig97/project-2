@@ -30,7 +30,7 @@ Donut Graph of Year Built
 
 Readme instructions to recreate database
 
-# Link to Datasets: 
+# Datasets: 
 https://www.kaggle.com/promptcloud/real-estate-data-from-trulia 
 
 https://developers.google.com/public-data/docs/canonical/states_csv
