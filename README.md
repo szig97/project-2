@@ -1,5 +1,6 @@
 # Trulia Real Estate Data
 Group Members: Andy McRae, Anthony Njuguna, Jeannaej Yambing, Sam Ziegler
+
 (Date range: 9/1/2019-10/31/2019)
 
 # Overview:
