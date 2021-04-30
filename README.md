@@ -10,8 +10,10 @@ SQL
 Flask 
 HTML (Jeannaej, Sam)
 
-# 1. What does the distribution of Price/SQft/Bed/Bath look like in the country/state?
-Leaflet Map (Andy)
+# Readme instructions to recreate database (Sam)
+
+# 1. What does the distribution of Price/SQft/Bed/Bath look like in the country/state? (Andy)
+Leaflet Map 
 Zooms in on State that is selected
 Layers of Markers
 Price
@@ -20,15 +22,13 @@ Bed
 Bath
 Tooltips?
 
-# 2. What effect does square feet have on house price?
-Plotly (Anthony)
+# 2. What effect does square feet have on house price? (Anthony)
+Plotly 
 Line graph of Price v Sq. Ft
 
-# 3. What is the distribution of years that houses on sale were built in a given state?
-Chart.js (Jeannaej)
+# 3. What is the distribution of years that houses on sale were built in a given state? (Jeannaej)
+Chart.js 
 Donut Graph of Year Built 
-
-Readme instructions to recreate database (sam)
 
 # Datasets: 
 https://www.kaggle.com/promptcloud/real-estate-data-from-trulia 
