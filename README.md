@@ -32,5 +32,6 @@ Readme instructions to recreate database
 
 # Link to Datasets: 
 https://www.kaggle.com/promptcloud/real-estate-data-from-trulia 
+
 https://developers.google.com/public-data/docs/canonical/states_csv
 
