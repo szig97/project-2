@@ -28,7 +28,7 @@ Line graph of Price v Sq. Ft
 Chart.js (Jeannaej)
 Donut Graph of Year Built 
 
-Readme instructions to recreate database
+Readme instructions to recreate database (sam)
 
 # Datasets: 
 https://www.kaggle.com/promptcloud/real-estate-data-from-trulia 
