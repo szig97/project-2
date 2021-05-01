@@ -1,22 +1,21 @@
 -- Create Tables
 create table trulia_real_estate (
-State int primary key,
-Uniq id text,
-Price text,
-Longitude text,
-Latitude text, 
-Lot Size text,
-Beds text,
-Bath text,
-Year Built text,
-Price Sqr Ft text,
-Address text,
-City text,
-Zipcode text
+id text primary key,
+price text,
+sqr_ft text,
+longitude text,
+latitude text,
+beds text,
+bath text,
+year_built text,
+address text,
+city text,
+state text,
+zipcode text
 );
 
 create table locations (
-state int primary key,
+state text primary key,
 latitude text,
 longitude text, 
 name text
