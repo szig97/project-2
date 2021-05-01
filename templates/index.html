@@ -15,6 +15,7 @@
     <div class="row">
         <div class="col-md-12 jumbotron text-center">
             <h1>2019 Trulia Real Estate Dashboard</h1>
+            <h4>By Andy McRae, Anthony Njuguna, Jeannaej Yambing, and Sam Ziegler</h3>
             <p>Use the interactive charts below to explore US Real Estate Data </p>
         </div>
     </div>
@@ -22,7 +23,13 @@
     <div class="row">
       <div class="col-md-3">
         <div class="well">
-            <h5>Pick a State</h5>
+            <h3>Project Description</h3>
+            <p>This project explores the distribution of house sales in the US listed on Trulia during September 2019 to October 2019.
+                The national map displays house prices, square footage, # of Beds and Baths. 
+                When exploring each state's house sales, find the distribution of when houses were built and the correlation between square footage and house price.
+            </p>
+            <br>
+            <h3>Pick a State</h3>
             <select id="selState" onchange="optionChanged(this.value)"></select>
         </div>
     </div>
@@ -36,20 +43,21 @@
         </div>
     </div>
 
-    <div class="col-md-6">
-        <div class = "well">
-            <h5>Line</h5>
-            <div id="line"></div>
-         </div>
-    </div>
-
+        <div class="col-md-6">
+            <div class = "well">
+                <h5>Line</h5>
+                <div id="line"></div>
+            </div>
+        </div>
+   
+    
     <div class="col-md-6">
         <div class = "well">
             <h5>Donut</h5>
             <div id="donut"></div>
         </div>
     </div>
-    
+
 </div>
 
   <script src="https://d3js.org/d3.v5.min.js"></script>
