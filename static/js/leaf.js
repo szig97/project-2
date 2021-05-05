@@ -5,40 +5,50 @@ console.log('leaf.js loaded');
 // var mapHeight = 3 * mapWidth / 4;
 // d3.select('#map').attr('width', mapWidth).attr('height', mapHeight);
 
-function buildMap(baths, beds) {
-    var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-        attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
-        tileSize: 512,
-        maxZoom: 18,
-        zoomOffset: -1,
-        id: "mapbox/light-v10",
-        accessToken: API_KEY
-    });
+var leafMap;
 
-    var myMap = L.map("map", {
-        center: [37.0902, -95.7129],
-        zoom: 4,
-        layers: [lightmap, baths]
-    });
+function buildMap(baths, beds, STData = null) {
 
-    let circleMap = {
-        'Baths': baths,
-        'Beds': beds
-    };
+    console.log(STData);
 
-    L.control.layers(circleMap).addTo(myMap);
+    if (STData !== null) {
+
+        console.log(+STData.latitude);
+
+        leafMap.setView(new L.LatLng(+STData.latitude, +STData.longitude));
+    } else {
+
+        var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+            attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+            tileSize: 512,
+            maxZoom: 18,
+            zoomOffset: -1,
+            id: "mapbox/light-v10",
+            accessToken: API_KEY
+        });
+        leafMap = L.map("map", {
+            center: [37.0902, -95.7129],
+            zoom: 4,
+            layers: [lightmap, baths]
+        });
+
+        let circleMap = {
+            'Baths': baths,
+            'Beds': beds
+        };
+
+        L.control.layers(circleMap, null, { collapsed: false }).addTo(leafMap);
+
+        console.log(typeof (leafMap));
+    }
+
+
 
 
 }
 
 
-
-
-// function scaleBath(bath){
-//     return 2 * bath;
-// }
-
-function createMarkers(gData) {
+function createMarkers(gData, STData = null) {
 
     // setting length of data for for loops
     const dataLength = gData.length;
@@ -63,10 +73,6 @@ function createMarkers(gData) {
     }
     let bedCircleLayer = L.layerGroup(bedCircles);
 
-
-
-
-
     // ===================================
 
     // ================================
@@ -90,19 +96,39 @@ function createMarkers(gData) {
     let bathCircleLayer = L.layerGroup(bathCircles);
     // ===================================
 
-    buildMap(bathCircleLayer, bedCircleLayer);
+    // buildMap(bathCircleLayer, bedCircleLayer);
+
+    buildMap(bathCircleLayer, bedCircleLayer, STData);
+
 }
 
-benji.json('/graphsdata', data => {
-    console.log(data);
+function init() {
+    benji.json('/graphsdata', gData => {
+        console.log(gData);
 
-    console.log(d3.extent(data.map(d => d.bath)));
-    console.log(d3.extent(data.map(d => d.beds)));
+        console.log(d3.extent(gData.map(d => d.bath)));
+        console.log(d3.extent(gData.map(d => d.beds)));
 
 
-    createMarkers(data);
+        console.log('Done');
 
-    console.log('Done');
+        createMarkers(gData);
 
-});
+    });
+}
+
+init();
+
+
+function optionChanged(ST) {
+    d3.json('/statesdata').then(sData => {
+        benji.json('/graphsdata', gData => {
+            let filtgData = gData.filter(d => d.state === ST);
+            let filtsData = sData.find(d => d.state === ST);
+
+            createMarkers(filtgData, filtsData);
+            console.log(sData);
+        });
+    });
+}
 
