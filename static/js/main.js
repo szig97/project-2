@@ -68,3 +68,28 @@ d3.json("/graphsdata").then(function (data) {
 
 // dropdown for states map and graphs
 
+function InitDashboard() {
+    console.log("InitDashboard()");
+
+    // Populate Dropdown Menu
+    var selector = d3.select("#selState");
+
+    d3.json("/graphsdata").then(data => {
+        console.log(data);
+
+        var sampleState = [...new Set(data.map(data => data.state))];
+        sampleState.sort();
+        console.log(sampleState);
+
+        sampleState.forEach(sampleId => {
+            selector.append("option")
+                .text(sampleId)
+                .property("value", sampleId);
+        });
+
+        var id = sampleState[0];
+    }); 
+}
+
+InitDashboard();
+
