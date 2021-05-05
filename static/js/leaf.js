@@ -14,10 +14,37 @@ var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/
 });
 
 var myMap = L.map("map", {
-    center: [40.7608, -111.8910],
+    center: [37.0902, -95.7129],
     // center: [37.09, -95.71],
     zoom: 4,
     layers: [lightmap]
 });
 
 lightmap.addTo(myMap);
+
+function scaleBath(bath){
+    return 2 * bath;
+}
+
+d3.json('/graphsdata').then( data => {
+    console.log(data);
+    // var bath = [];
+    // for (i=0; i < data.length; i++) {
+    //     bath.push(parseInt(data[i].bath));
+    // }
+
+    var bathCircles = [];
+
+    const dataLength = data.length;
+    for (let i=0; i< dataLength; i++) {
+        const current = data[i];
+        var bathCircle = L.circleMarker([current.latitude, current.longitude], {
+            color:'black',
+            fillColor: 'purple',
+            radius: scaleBath(current.bath),
+        });
+        bathCircles.push(bathCircle);
+    }
+    L.layerGroup(bathCircles).addTo(myMap);
+
+});
