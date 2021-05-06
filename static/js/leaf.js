@@ -5,7 +5,69 @@ console.log('leaf.js loaded');
 // var mapHeight = 3 * mapWidth / 4;
 // d3.select('#map').attr('width', mapWidth).attr('height', mapHeight);
 
+// ===================================
+// this is where i will control the level of zoom for each state
+const zoomLevels = [
+    {
+        state: 'AK',
+        zoomin: 4
+    },
+    {
+        state: 'AL',
+        zoomin: 6
+    },
+    {
+        state: 'AZ',
+        zoomin: 6
+    },
+    {
+        state: 'CA',
+        zoomin: 5
+    },
+    {
+        state: 'CO',
+        zoomin: 6
+    },
+    {
+        state: 'DC',
+        zoomin: 11
+    },
+    {
+        state: 'FL',
+        zoomin: 6
+    },
+    {
+        state: 'GA',
+        zoomin: 6
+    },
+    {
+        state: 'IA',
+        zoomin: 7
+    },
+    {
+        state: 'ID',
+        zoomin: 6
+    },
+    {
+        state: 'IL',
+        zoomin: 6
+    },
+    {
+        state: 'KY',
+        zoomin: 7
+    }
+];
+// ====================================
+
 var leafMap;
+
+var aConrtoller;
+
+var aBathLayer;
+
+var aBedLayer;
+
+var circleMapBox;
 
 function buildMap(baths, beds, STData = null) {
 
@@ -15,7 +77,24 @@ function buildMap(baths, beds, STData = null) {
 
         console.log(+STData.latitude);
 
-        leafMap.setView(new L.LatLng(+STData.latitude, +STData.longitude));
+        leafMap.setView(new L.LatLng(+STData.latitude, +STData.longitude), STData.zoomin);
+
+        leafMap.removeControl(aController);
+
+        leafMap.removeLayer(aBathLayer);
+
+        leafMap.removeLayer(aBedLayer);
+
+        leafMap.addLayer(baths);
+
+        circleMapBox = {
+            'Baths': baths,
+            'Beds': beds
+        };
+
+        aController = L.control.layers(circleMapBox, null, { collapsed: false });
+        aController.addTo(leafMap);
+
     } else {
 
         var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -32,23 +111,28 @@ function buildMap(baths, beds, STData = null) {
             layers: [lightmap, baths]
         });
 
-        let circleMap = {
+        let circleMapBox = {
             'Baths': baths,
             'Beds': beds
         };
 
-        L.control.layers(circleMap, null, { collapsed: false }).addTo(leafMap);
+        aBathLayer = baths;
+        aBedLayer = beds;
+
+        aController = L.control.layers(circleMapBox, null, { collapsed: false });
+        aController.addTo(leafMap);
 
         console.log(typeof (leafMap));
     }
-
-
 
 
 }
 
 
 function createMarkers(gData, STData = null) {
+
+
+
 
     // setting length of data for for loops
     const dataLength = gData.length;
@@ -69,6 +153,11 @@ function createMarkers(gData, STData = null) {
             fillOpacity: 0.1,
             opacity: 0.1
         });
+
+        if (STData !== null) {
+            bedCircle.bindPopup('<h6>' + current.address + '</h6><p>Price: ' + current.price + '</p><p>Sqrft: ' + current.sqrft + '</p><p>Beds: ' + current.beds + '</p><p>Baths: ' + current.bath + '</p>');
+        }
+
         bedCircles.push(bedCircle);
     }
     let bedCircleLayer = L.layerGroup(bedCircles);
@@ -91,6 +180,11 @@ function createMarkers(gData, STData = null) {
             fillOpacity: 0.1,
             opacity: 0.1
         });
+
+        if (STData !== null) {
+            bathCircle.bindPopup('<h6>' + current.address + '</h6><p>Price: ' + current.price + '</p><p>Sqrft: ' + current.sqrft + '</p><p>Beds: ' + current.beds + '</p><p>Baths: ' + current.bath + '</p>');
+        }
+
         bathCircles.push(bathCircle);
     }
     let bathCircleLayer = L.layerGroup(bathCircles);
@@ -121,13 +215,18 @@ init();
 
 
 function optionChanged(ST) {
-    d3.json('/statesdata').then(sData => {
+    benji.json('/statesdata', sData => {
         benji.json('/graphsdata', gData => {
             let filtgData = gData.filter(d => d.state === ST);
             let filtsData = sData.find(d => d.state === ST);
+            let filtzLevel = zoomLevels.find(d => d.state === ST);
+
+            filtsData.zoomin = filtzLevel.zoomin;
+
+
 
             createMarkers(filtgData, filtsData);
-            console.log(sData);
+            console.log(filtgData);
         });
     });
 }
