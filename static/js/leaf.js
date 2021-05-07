@@ -319,5 +319,6 @@ function reMap(ST) {
 
 function optionChanged(ST) {
     reMap(ST);
+    CreateDonutChart(ST);
 }
 

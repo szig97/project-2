@@ -10,7 +10,6 @@ SQL
 Flask 
 HTML (Jeannaej, Sam)
 
-# Readme instructions to recreate database (Sam)
 
 # 1. What does the distribution of Price/SQft/Bed/Bath look like in the country/state? (Andy)
 Leaflet Map 

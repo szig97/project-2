@@ -61,11 +61,13 @@
             <div class="col-md-6">
                 <div class="well">
                     <h5>Donut</h5>
-                    <div id="donut"></div>
+                    <div id="donut">
+                        <canvas id="myChart"></canvas>
+                    </div>
                 </div>
             </div>
 
-
+            
 
         </div>
 
@@ -76,8 +78,10 @@
 
         <script src="https://d3js.org/d3.v5.min.js"></script>
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+      
+        <!--Importing Chart.js-->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-        
         <!-- imports main d3Caching code -->
         <!-- This was supplied to us by TA Benji to help speed up code. -->
         <!-- Its purpose is to call the data only once -->
@@ -92,6 +96,8 @@
         <script type="text/javascript" src="static/js/zoom.js"></script> -->
         <!-- imports leaflet JavaScript code -->
         <script type="text/javascript" src="static/js/leaf.js"></script> -->
+
+
 
 </body>
 
