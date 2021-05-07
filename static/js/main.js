@@ -82,12 +82,19 @@ function InitDashboard() {
     // Populate Dropdown Menu
     var selector = d3.select("#selState");
 
-    d3.json("/graphsdata").then(data => {
+    benji.json("/graphsdata", data => {
         console.log(data);
 
         var sampleState = [...new Set(data.map(data => data.state))];
         sampleState.sort();
         console.log(sampleState);
+
+        // ================================
+        // Andy Wrote this
+        selector.append('option')
+            .text('USA')
+            .property('value', 'USA');
+        // ================================
 
         sampleState.forEach(sampleId => {
             selector.append("option")
