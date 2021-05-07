@@ -114,8 +114,20 @@ function createMarkers(gData, STData = null) {
 
 
     function Popcorn(Korn) {
-        const htmlString = ('<h6>' + Korn.address + '</h6><p>Price: ' + Korn.price + 
-            '</p><p>Sqrft: ' + Korn.sqrft + '</p><p>Beds: ' + Korn.beds + '</p><p>Baths: ' + Korn.bath + '</p>');
+
+        // ------------------------------------------------------------------
+        // got numberWithCommas function here https://stackoverflow.com/questions/2901102/how-to-print-a-number-with-commas-as-thousands-separators-in-javascript
+        function numberWithCommas(x) {
+            return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        // -------------------------------------------------------------------
+
+        let priceString = `$${numberWithCommas(Math.round(Korn.price))}`;
+
+        let sqrftString = `${Korn.sqrft}sq ft`;
+
+        const htmlString = ('<h6>' + Korn.address + '</h6><p>Price: ' + priceString + 
+            '</p><p>Sqrft: ' + sqrftString + '</p><p>Beds: ' + Korn.beds + '</p><p>Baths: ' + Korn.bath + '</p>');
 
         return htmlString;
     }
@@ -147,7 +159,6 @@ function createMarkers(gData, STData = null) {
 
     // ============================
 
-
     // ================================
     // circles for Beds
 
@@ -171,7 +182,7 @@ function createMarkers(gData, STData = null) {
         bedCircles.push(bedCircle);
     }
     let bedCircleLayer = L.layerGroup(bedCircles);
-
+           
     // ===================================
 
     // ================================
@@ -222,6 +233,14 @@ function createMarkers(gData, STData = null) {
 
     let priceCircleLayer = L.layerGroup(priceCircles);
     // =====================================
+
+    // ================================================
+    // circles for SqrFt
+
+
+
+    // ================================================
+
 
     // buildMap(bathCircleLayer, bedCircleLayer);
 
