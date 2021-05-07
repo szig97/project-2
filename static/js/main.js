@@ -50,27 +50,71 @@ console.log("main.js loaded");
 
 
 // donut chart
-var donutGraph = d3.select("#donut")
+function CreateDonutChart(ST) {
+  console.log(`User selected ${ST}`);
 
-    d3.json("/graphsdata").then(function (data) {
-        console.log(data);
-    
-        var yearBuilt = data.map(data => +data.yearbuilt);
-       
-        console.log(yearBuilt);
+  var donutGraph = d3.select("#donut")
+
+    benji.json("/graphsdata", data => {
+      console.log(data);
+  
+      var yearBuiltArray = data.filter(data => data.state === "AK"); 
+      console.log(yearBuiltArray);
+
+      var yearBuilt = yearBuiltArray.map(data => +data.yearbuilt);
+      console.log(yearBuilt);
+
+      const input = yearBuilt;
+      const result = input.reduce((total, value) => {
+           total[value] = (total[value] || 0) + 1;
+           return total;}, {});
+      console.log(result);
+
+      var keys = Object.keys(result);
+      console.log(keys);
+
+      var values = Object.values(result);
+      console.log(values);
 
     });
-
-function CreateDonutChart(state) {
-    console.log(`User selected ${state}`);
 }
 
+// Setting up the Chart.js - code from chartjs.org documentation integration
+//var Chart = require('chart.js');
+//var myChart = new Chart(ctx, {...});
+//import Chart from 'chart.js/auto';
+  
+// Code from chartjs.org documentation usage
+// var ctx = document.getElementById('myChart');
+// var ctx = document.getElementById('myChart').getContext('2d');
+// var ctx = $('#myChart');
+// var ctx = 'myChart';
+
+// Sample code from chartjs.org documentation donut charts
+// const data = {
+//     labels: [
+//       'Red',
+//       'Blue',
+//       'Yellow'
+//     ],
+//     datasets: [{
+//       label: 'My First Dataset',
+//       data: [300, 50, 100],
+//       backgroundColor: [
+//         'rgb(255, 99, 132)',
+//         'rgb(54, 162, 235)',
+//         'rgb(255, 205, 86)'
+//       ],
+//       hoverOffset: 4
+//     }]
+//   };
+// const config = {
+//     type: 'doughnut',
+//     data: data,
+// };
+ 
+
 // leaflet map
-
-
-
-
-
 
 
 
