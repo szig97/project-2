@@ -64,6 +64,7 @@ function CreateDonutChart(ST) {
       var yearBuilt = yearBuiltArray.map(data => +data.yearbuilt);
       console.log(yearBuilt);
 
+      // Got code from https://stackoverflow.com/questions/52711740/group-array-and-get-count
       const input = yearBuilt;
       const result = input.reduce((total, value) => {
            total[value] = (total[value] || 0) + 1;
