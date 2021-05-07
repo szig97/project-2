@@ -3,16 +3,16 @@ console.log("main.js loaded");
 // line graph
 
 // Setting variable for line grapgh height and width
-var lineHeight = 600;
-var lineWidth = 400;
+// var lineHeight = 600;
+// var lineWidth = 400;
 
-// Append line graph
-var linegraph = d3.select("#line")
-    .append("linegraph")
-    .attr("height", lineHeight)
-    .attr("width", lineWidth);
+// // Append line graph
+// var linegraph = d3.select("#line")
+//     .append("linegraph")
+//     .attr("height", lineHeight)
+//     .attr("width", lineWidth);
 
- d3.json("/graphsdata").then(function (data) {
+//  d3.json("/graphsdata").then(function (data) {
 
     // view data on console
     //console.log(data);
