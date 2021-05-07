@@ -10,6 +10,18 @@ SQL
 Flask 
 HTML (Jeannaej, Sam)
 
+# How to populate the database:
+1.	Clone the 'trulia-real-estate' repository onto your computer.
+2.	Open pgAdmin and create a new database called 'real_estate_db.'
+3.	Open a query tool in 'real_estate_db' and navigate to the root directory of the 'etl-challenge' repository.
+4.	Select the file 'queries.sql.'
+5.	Run the create table code to create the 'trulia_real_estate' table. 
+6.	Run the create table code to create the 'locations' table.
+7.	Run `select * from trulia_real_estate` and `select * from locations` to ensure that the tables were created.
+8.	Open a Jupyter Notebook in the 'etl-challenge' repository. Create a text file called 'config.py.' In this file, save your pgAdmin password as 'password'.
+9.	Open ‘real_estate_etl.ipynb.' and run all the cells. 
+
+
 
 # 1. What does the distribution of Price/SQft/Bed/Bath look like in the country/state? (Andy)
 Leaflet Map 
