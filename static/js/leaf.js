@@ -1,7 +1,7 @@
 // leaflet map lives here
 console.log('leaf.js loaded');
 
-// var mapWidth = d3.select('#map').property('offsetWidth');
+// var mapWidth = d3.select('.well').property('width');
 // var mapHeight = 3 * mapWidth / 4;
 // d3.select('#map').attr('width', mapWidth).attr('height', mapHeight);
 
@@ -103,7 +103,9 @@ var buildMap = buildMapContianer();
 // Start Where Circle Layers Are Drawn and Built
 
 function createMarkers(gData, STData = null) {
-
+     
+    console.log('STData');
+    console.log(STData);
     // =====================================
     // Scalers and Variables
 
@@ -120,7 +122,7 @@ function createMarkers(gData, STData = null) {
 
 
     function scaleBedBath(room) {
-        if (STData !== null) {
+        if (STData !== null && STData.state !== 'USA') {
             return 2 * room;
         } else {
             return 1 * room;
@@ -133,7 +135,7 @@ function createMarkers(gData, STData = null) {
 
 
     let transparency = .1;
-    if (STData !== null) {
+    if (STData !== null && STData.state !== 'USA') {
         transparency = .4;
     }
 
@@ -162,7 +164,7 @@ function createMarkers(gData, STData = null) {
             opacity: transparency
         });
 
-        if (STData !== null) {
+        if (STData !== null && STData.state !== 'USA') {
             bedCircle.bindPopup(Popcorn(current));
         }
 
@@ -187,7 +189,7 @@ function createMarkers(gData, STData = null) {
             opacity: transparency
         });
 
-        if (STData !== null) {
+        if (STData !== null && STData.state !== 'USA') {
             bathCircle.bindPopup(Popcorn(current));
         }
 
@@ -211,7 +213,7 @@ function createMarkers(gData, STData = null) {
             opacity: transparency
         });
 
-        if (STData !== null) {
+        if (STData !== null && STData.state !== 'USA') {
             priceCircle.bindPopup(Popcorn(current));
         }
 
@@ -233,11 +235,11 @@ function createMarkers(gData, STData = null) {
 // ========================================================
 // Start Where Map is Initialized
 
-function init() {
+function initMap() {
     benji.json('/graphsdata', gData => {
         console.log(gData);
 
-        filtData = gData.filter(g => (g.price !== "Contact For Price" & g.price !== "Contact For Estimate"))
+        filtData = gData.filter(g => (g.price !== "Contact For Price" && g.price !== "Contact For Estimate"))
 
         console.log(d3.extent(filtData.map(d => d.bath)));
         console.log(d3.extent(filtData.map(d => d.beds)));
@@ -249,7 +251,7 @@ function init() {
     });
 }
 
-init();
+initMap();
 
 // End where Map is Initialized
 // ========================================================
@@ -257,23 +259,30 @@ init();
 // =======================================================
 // Start Where Change is Handled
 
-function optionChanged(ST) {
+function reMap(ST) {
     benji.json('/statesdata', sData => {
         benji.json('/graphsdata', gData => {
 
             let filtgData;
-            let filtsData;
+
+            let filtsData = 
+                {
+                    latitude: 37.0902, 
+                    longitude: -95.7129,
+                    name: 'United States of America',
+                    state: 'USA',
+                    zoomin: 4
+                };
 
             if (ST === 'USA') {
 
                 filtgData = gData;
-                filtsData = null;
 
             } else {
 
-                filtgData = gData.filter(g => (g.price !== "Contact For Price" & g.price !== "Contact For Estimate")).filter(d => d.state === ST);
-                filtsData = sData.filter(g => (g.price !== "Contact For Price" & g.price !== "Contact For Estimate")).find(d => d.state === ST);
-                let filtzLevel = zoomLevels.filter(g => (g.price !== "Contact For Price" & g.price !== "Contact For Estimate")).find(d => d.state === ST);
+                filtgData = gData.filter(g => (g.price !== "Contact For Price" && g.price !== "Contact For Estimate")).filter(d => d.state === ST);
+                filtsData = sData.filter(g => (g.price !== "Contact For Price" && g.price !== "Contact For Estimate")).find(d => d.state === ST);
+                let filtzLevel = zoomLevels.filter(g => (g.price !== "Contact For Price" && g.price !== "Contact For Estimate")).find(d => d.state === ST);
 
                 filtsData.zoomin = filtzLevel.zoomin;
 
@@ -287,4 +296,9 @@ function optionChanged(ST) {
 
 // End where Change is Handled
 // ========================================================
+
+
+function optionChanged(ST) {
+    reMap(ST);
+}
 
