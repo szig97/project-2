@@ -1,161 +1,171 @@
 // leaflet map lives here
 console.log('leaf.js loaded');
 
-// var mapWidth = d3.select('#map').property('offsetWidth');
+// var mapWidth = d3.select('.well').property('width');
 // var mapHeight = 3 * mapWidth / 4;
 // d3.select('#map').attr('width', mapWidth).attr('height', mapHeight);
 
-// ===================================
-// this is where i will control the level of zoom for each state
-const zoomLevels = [
-    {
-        state: 'AK',
-        zoomin: 4
-    },
-    {
-        state: 'AL',
-        zoomin: 6
-    },
-    {
-        state: 'AZ',
-        zoomin: 6
-    },
-    {
-        state: 'CA',
-        zoomin: 5
-    },
-    {
-        state: 'CO',
-        zoomin: 6
-    },
-    {
-        state: 'DC',
-        zoomin: 11
-    },
-    {
-        state: 'FL',
-        zoomin: 6
-    },
-    {
-        state: 'GA',
-        zoomin: 6
-    },
-    {
-        state: 'IA',
-        zoomin: 7
-    },
-    {
-        state: 'ID',
-        zoomin: 6
-    },
-    {
-        state: 'IL',
-        zoomin: 6
-    },
-    {
-        state: 'KY',
-        zoomin: 7
-    }
-];
-// ====================================
+// ========================================
+// Start where the Map is built
 
-var leafMap;
+function buildMapContianer() {
 
-var aConrtoller;
+    var leafMap;
 
-var aBathLayer;
+    var aController;
 
-var aBedLayer;
+    var aBathLayer;
 
-var circleMapBox;
+    var aBedLayer;
 
-function buildMap(baths, beds, STData = null) {
+    var aPriceLayer;
 
-    console.log(STData);
+    var circleMapBox;
 
-    if (STData !== null) {
+    function buildMap(baths, beds, price, STData = null) {
 
-        console.log(+STData.latitude);
+        console.log(STData);
 
-        leafMap.setView(new L.LatLng(+STData.latitude, +STData.longitude), STData.zoomin);
+        if (STData !== null) {
 
-        leafMap.removeControl(aController);
+            console.log(+STData.latitude);
 
-        leafMap.removeLayer(aBathLayer);
+            leafMap.setView(new L.LatLng(+STData.latitude, +STData.longitude), STData.zoomin);
 
-        leafMap.removeLayer(aBedLayer);
+            leafMap.removeControl(aController);
 
-        leafMap.addLayer(baths);
+            leafMap.removeLayer(aBathLayer);
 
-        circleMapBox = {
-            'Baths': baths,
-            'Beds': beds
-        };
+            leafMap.removeLayer(aBedLayer);
 
-        aController = L.control.layers(circleMapBox, null, { collapsed: false });
-        aController.addTo(leafMap);
+            leafMap.removeLayer(aPriceLayer)
 
-    } else {
+            aBathLayer = baths;
+            aBedLayer = beds;
+            aPriceLayer = price;
 
-        var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
-            attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
-            tileSize: 512,
-            maxZoom: 18,
-            zoomOffset: -1,
-            id: "mapbox/light-v10",
-            accessToken: API_KEY
-        });
-        leafMap = L.map("map", {
-            center: [37.0902, -95.7129],
-            zoom: 4,
-            layers: [lightmap, baths]
-        });
+            leafMap.addLayer(baths);
 
-        let circleMapBox = {
-            'Baths': baths,
-            'Beds': beds
-        };
+            circleMapBox = {
+                'Baths': baths,
+                'Beds': beds,
+                'Price': price
+            };
 
-        aBathLayer = baths;
-        aBedLayer = beds;
+            aController = L.control.layers(circleMapBox, null, { collapsed: false });
+            aController.addTo(leafMap);
 
-        aController = L.control.layers(circleMapBox, null, { collapsed: false });
-        aController.addTo(leafMap);
+        } else {
 
-        console.log(typeof (leafMap));
+            var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+                attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
+                tileSize: 512,
+                maxZoom: 18,
+                zoomOffset: -1,
+                id: "mapbox/light-v10",
+                accessToken: API_KEY
+            });
+            leafMap = L.map("map", {
+                center: [37.0902, -95.7129],
+                zoom: 4,
+                layers: [lightmap, baths]
+            });
+
+            let circleMapBox = {
+                'Baths': baths,
+                'Beds': beds,
+                'Price': price
+            };
+
+            aBathLayer = baths;
+            aBedLayer = beds;
+            aPriceLayer = price;
+
+            aController = L.control.layers(circleMapBox, null, { collapsed: false });
+            aController.addTo(leafMap);
+
+            console.log(typeof (leafMap));
+        }
+
+
     }
 
-
+    return buildMap;
 }
 
+var buildMap = buildMapContianer();
+
+// End where Map is built
+// ============================================================
+
+
+// ==========================================================
+// Start Where Circle Layers Are Drawn and Built
 
 function createMarkers(gData, STData = null) {
-
-
-
+     
+    console.log('STData');
+    console.log(STData);
+    // =====================================
+    // Scalers and Variables
 
     // setting length of data for for loops
     const dataLength = gData.length;
+
+
+    function Popcorn(Korn) {
+        const htmlString = ('<h6>' + Korn.address + '</h6><p>Price: ' + Korn.price + 
+            '</p><p>Sqrft: ' + Korn.sqrft + '</p><p>Beds: ' + Korn.beds + '</p><p>Baths: ' + Korn.bath + '</p>');
+
+        return htmlString;
+    }
+
+
+    function scaleBedBath(room) {
+        if (STData !== null && STData.state !== 'USA') {
+            return 2 * room;
+        } else {
+            return 1 * room;
+        }
+    }
+
+    function scalePrice(money) {
+        return Math.log(money) / 2;
+    }
+
+
+    let transparency = .1;
+    if (STData !== null && STData.state !== 'USA') {
+        transparency = .4;
+    }
+
+    const bedColor = 'pink';
+
+    const bathColor = 'lightblue';
+
+    const priceColor = 'lightgreen';
+
+    // ============================
+
+
     // ================================
     // circles for Beds
-    function scaleBed(bed) {
-        return 1 * bed;
-    }
+
 
     let bedCircles = [];
 
     for (let i = 0; i < dataLength; i++) {
         const current = gData[i];
         let bedCircle = L.circleMarker([current.latitude, current.longitude], {
-            color: 'black',
-            fillColor: 'green',
-            radius: scaleBed(current.beds),
-            fillOpacity: 0.1,
-            opacity: 0.1
+            color: bedColor,
+            fillColor: bedColor,
+            radius: scaleBedBath(current.beds),
+            fillOpacity: transparency,
+            opacity: transparency
         });
 
-        if (STData !== null) {
-            bedCircle.bindPopup('<h6>' + current.address + '</h6><p>Price: ' + current.price + '</p><p>Sqrft: ' + current.sqrft + '</p><p>Beds: ' + current.beds + '</p><p>Baths: ' + current.bath + '</p>');
+        if (STData !== null && STData.state !== 'USA') {
+            bedCircle.bindPopup(Popcorn(current));
         }
 
         bedCircles.push(bedCircle);
@@ -166,23 +176,21 @@ function createMarkers(gData, STData = null) {
 
     // ================================
     // circles for Baths
-    function scaleBath(bath) {
-        return 1.5 * bath;
-    }
+
     var bathCircles = [];
 
     for (let i = 0; i < dataLength; i++) {
         const current = gData[i];
         var bathCircle = L.circleMarker([current.latitude, current.longitude], {
-            color: 'black',
-            fillColor: 'purple',
-            radius: scaleBath(current.bath),
-            fillOpacity: 0.1,
-            opacity: 0.1
+            color: bathColor,
+            fillColor: bathColor,
+            radius: scaleBedBath(current.bath),
+            fillOpacity: transparency,
+            opacity: transparency
         });
 
-        if (STData !== null) {
-            bathCircle.bindPopup('<h6>' + current.address + '</h6><p>Price: ' + current.price + '</p><p>Sqrft: ' + current.sqrft + '</p><p>Beds: ' + current.beds + '</p><p>Baths: ' + current.bath + '</p>');
+        if (STData !== null && STData.state !== 'USA') {
+            bathCircle.bindPopup(Popcorn(current));
         }
 
         bathCircles.push(bathCircle);
@@ -190,44 +198,107 @@ function createMarkers(gData, STData = null) {
     let bathCircleLayer = L.layerGroup(bathCircles);
     // ===================================
 
+    // ====================================
+    // circles for Price
+
+    let priceCircles = [];
+
+    for (let i = 0; i < dataLength; i++) {
+        const current = gData[i];
+        var priceCircle = L.circleMarker([current.latitude, current.longitude], {
+            color: priceColor,
+            fillColor: priceColor,
+            radius: scalePrice(current.price),
+            fillOpacity: transparency,
+            opacity: transparency
+        });
+
+        if (STData !== null && STData.state !== 'USA') {
+            priceCircle.bindPopup(Popcorn(current));
+        }
+
+        priceCircles.push(priceCircle);
+    }
+
+    let priceCircleLayer = L.layerGroup(priceCircles);
+    // =====================================
+
     // buildMap(bathCircleLayer, bedCircleLayer);
 
-    buildMap(bathCircleLayer, bedCircleLayer, STData);
+    buildMap(bathCircleLayer, bedCircleLayer, priceCircleLayer, STData);
 
 }
 
-function init() {
+// End where Circles are Drawn and Built
+// =========================================================
+
+// ========================================================
+// Start Where Map is Initialized
+
+function initMap() {
     benji.json('/graphsdata', gData => {
         console.log(gData);
 
-        console.log(d3.extent(gData.map(d => d.bath)));
-        console.log(d3.extent(gData.map(d => d.beds)));
+        filtData = gData.filter(g => (g.price !== "Contact For Price" && g.price !== "Contact For Estimate"))
 
+        console.log(d3.extent(filtData.map(d => d.bath)));
+        console.log(d3.extent(filtData.map(d => d.beds)));
+        console.log(d3.extent(filtData.map(d => d.price)));
+
+        createMarkers(filtData);
 
         console.log('Done');
-
-        createMarkers(gData);
-
     });
 }
 
-init();
+initMap();
 
+// End where Map is Initialized
+// ========================================================
 
-function optionChanged(ST) {
+// =======================================================
+// Start Where Change is Handled
+
+function reMap(ST) {
     benji.json('/statesdata', sData => {
         benji.json('/graphsdata', gData => {
-            let filtgData = gData.filter(d => d.state === ST);
-            let filtsData = sData.find(d => d.state === ST);
-            let filtzLevel = zoomLevels.find(d => d.state === ST);
 
-            filtsData.zoomin = filtzLevel.zoomin;
+            let filtgData;
 
+            let filtsData = 
+                {
+                    latitude: 37.0902, 
+                    longitude: -95.7129,
+                    name: 'United States of America',
+                    state: 'USA',
+                    zoomin: 4
+                };
 
+            if (ST === 'USA') {
+
+                filtgData = gData;
+
+            } else {
+
+                filtgData = gData.filter(g => (g.price !== "Contact For Price" && g.price !== "Contact For Estimate")).filter(d => d.state === ST);
+                filtsData = sData.filter(g => (g.price !== "Contact For Price" && g.price !== "Contact For Estimate")).find(d => d.state === ST);
+                let filtzLevel = zoomLevels.filter(g => (g.price !== "Contact For Price" && g.price !== "Contact For Estimate")).find(d => d.state === ST);
+
+                filtsData.zoomin = filtzLevel.zoomin;
+
+            }
 
             createMarkers(filtgData, filtsData);
             console.log(filtgData);
         });
     });
+}
+
+// End where Change is Handled
+// ========================================================
+
+
+function optionChanged(ST) {
+    reMap(ST);
 }
 

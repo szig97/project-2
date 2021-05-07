@@ -2,7 +2,10 @@ console.log("main.js loaded");
 
 // line graph
 
+
 Setting variable for line grapgh height and width
+// Setting variable for line grapgh height and width
+
 var lineHeight = 600;
 var lineWidth = 400;
 
@@ -12,7 +15,8 @@ var linegraph = d3.select("#line")
     .attr("height", lineHeight)
     .attr("width", lineWidth);
 
-d3.json("/graphsdata").then(function (data) {
+ d3.json("/graphsdata").then(function (data) {
+
 
     view data on console
     console.log(data);
@@ -124,12 +128,19 @@ function InitDashboard() {
     // Populate Dropdown Menu
     var selector = d3.select("#selState");
 
-    d3.json("/graphsdata").then(data => {
+    benji.json("/graphsdata", data => {
         console.log(data);
 
         var sampleState = [...new Set(data.map(data => data.state))];
         sampleState.sort();
         console.log(sampleState);
+
+        // ================================
+        // Andy Wrote this
+        selector.append('option')
+            .text('USA')
+            .property('value', 'USA');
+        // ================================
 
         sampleState.forEach(sampleId => {
             selector.append("option")
