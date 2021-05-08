@@ -187,9 +187,7 @@ function drawingDonutChart() {
               display: true,
               text: `Decades Units were built`
           }
-
-        }
-      }
+       }
     }
   };
 
