@@ -164,7 +164,7 @@ function drawingDonutChart() {
             },
             title: {
               display: true,
-              text: 'Decades Units were built'
+              text: `Decades Units were built`
           }
         }
     }
