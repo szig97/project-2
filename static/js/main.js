@@ -65,7 +65,11 @@ d3.json("/graphsdata").then(data => {
   Plotly.newPlot('line', data1, layout);
 });
 
+
+// ========================================================
+
 // donut chart
+
 var donutChart;
 
 var decade = ["180","181", "182", "183", "184","185","186","187","188","189","190","191", "192", "193", "194", "195","196","197", "198","199", "200","201"]
@@ -76,13 +80,42 @@ var count = new Array(decadeLength).fill(0);
 
 var label = ["1800s","1810s", "1820s", "1830s", "1840s","1850s","1860s","1870s","1880s","1890s","1900s","1910s", "1920s", "1930s", "1940s", "1950s","1960s","1970s", "1980s","1990s", "2000s","2010s"]
 
-function sortYears(data) {
+var colors = [
+  'rgb(220, 20, 60)',
+  'rgb(205,92,92)',
+  'rgb(255,260,122)',
+  'rgb(255,165,0)',
+  'rgb(240,230,140)',
+  'rgb(154,205,50)',
+  'rgb(107,142,35)',
+  'rgb(50,205,50)',
+  'rgb(255, 153, 255)',
+  'rgb(153, 255, 255)',
+  'rgb(153, 255, 153)',
+  'rgb(255, 204, 153)',
+  'rgb(255, 153, 255)',
+  'rgb(153, 255, 255)',
+  'rgb(153, 255, 153)',
+  'rgb(255, 204, 153)',
+  'rgb(255, 153, 255)',
+  'rgb(153, 255, 255)',
+  'rgb(153, 255, 153)',
+  'rgb(255, 204, 153)',
+  'rgb(255, 153, 255)',
+  'rgb(153, 255, 255)',
+]
+
+
+// --------------------------------------
+
+function sortYears() {
   benji.json("/graphsdata", data => {
-    console.log(data);
+    //console.log(data);
 
     var yearBuilt = data.map(data => data.yearbuilt);
     console.log(yearBuilt);
-
+    
+    // Code help from Andy
     yearBuilt.forEach(row => {
       
       for (let i = 0; i < decadeLength; i++){
@@ -93,15 +126,18 @@ function sortYears(data) {
     }
     
   });
-
-    console.log(decade);
-    console.log(count);
+    // console.log(decade);
+     console.log(count);
 });
 }
 
+// --------------------------------------
+
 function drawingDonutChart() {
   
-  // Set ups the data for donut chart (outline based of https://www.chartjs.org/docs/latest/charts/doughnut.html and https://www.chartjs.org/docs/latest/samples/other-charts/doughnut.html)
+  // Set ups the data for donut chart (outline based of https://www.chartjs.org/docs/latest/charts/doughnut.html 
+  // and https://www.chartjs.org/docs/latest/samples/other-charts/doughnut.html)
+
   const graphData = {
     labels: label,
     datasets: [{
@@ -127,9 +163,9 @@ function drawingDonutChart() {
                 position: 'top',
             },
             title: {
-                display: true,
-                text: 'Year Houses are Built'
-            }
+              display: true,
+              text: 'Decades Units were built'
+          }
         }
     }
   };
@@ -140,13 +176,15 @@ function drawingDonutChart() {
   donutChart = myChart;
 }
 
+// --------------------------------------
+
 function initDonut(){
-  var donutGraph = d3.select("#donut");
+  // var donutGraph = d3.select("#donut");
 
     benji.json("/graphsdata", data => {
       // console.log(data);
      
-    sortYears();
+    sortYears(data);
 
     drawingDonutChart();
     
@@ -155,29 +193,46 @@ function initDonut(){
 
 initDonut();
 
+// --------------------------------------
 
 function redrawDonut(ST) {
   console.log(`User selected ${ST}`);
 
-  var donutGraph = d3.select("#donut");
-
+  // var donutGraph = d3.select("#donut");
 
   donutChart.destroy();
 
     benji.json("/graphsdata", data => {
-      console.log(data);
-  
+      //console.log(data);
+      
+      if (ST === "USA") {
+        initDonut();
+      }
+
+      else{
       var yearBuiltArray = data.filter(data => data.state === ST); 
       console.log(yearBuiltArray);
 
-      var yearBuilt = yearBuiltArray.map(data => +data.yearbuilt);
+      var yearBuilt = yearBuiltArray.map(data => data.yearbuilt);
       console.log(yearBuilt);
 
-      sortYears();
+      yearBuilt.forEach(row => {
+      
+        for (let i = 0; i < decadeLength; i++){
+  
+          if(row.includes(decade[i]) ){
+            count[i] = count[i] + 1;
+          }
+      }
+      
+    });
+    console.log(count);
       drawingDonutChart();
+      }
+
     });
 }
-
+// ========================================================
 
 // dropdown for states map and graphs
 
