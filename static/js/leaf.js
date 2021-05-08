@@ -59,13 +59,13 @@ function buildMapContainer() {
 
             // --------------------------
             // re-adding layers
-            leafMap.addLayer(baths);
+            leafMap.addLayer(price);
 
             circleMapBox = {
-                'Baths': baths,
-                'Beds': beds,
                 'Price': price,
-                'Sqr Ft': ft
+                'Sqr Ft': ft,
+                'Beds': beds,
+                'Baths': baths
             };
 
             aController = L.control.layers(circleMapBox, null, { collapsed: false });
@@ -89,15 +89,15 @@ function buildMapContainer() {
             leafMap = L.map("map", {
                 center: [37.0902, -95.7129],
                 zoom: 4,
-                layers: [lightmap, baths]
+                layers: [lightmap, price]
             });
 
             // Layers to be put in control
             let circleMapBox = {
-                'Baths': baths,
-                'Beds': beds,
                 'Price': price,
-                'Sqr Ft': ft
+                'Sqr Ft': ft,
+                'Beds': beds,
+                'Baths': baths
             };
 
             // -------------------------
@@ -176,7 +176,6 @@ function createMarkers(gData, STData = null) {
         if (room > 10) {
             room = 10;
         }
-
 
         if (STData !== null && STData.state !== 'USA') {
             // if the map is zoomed in on a state the circles will have larger radii
