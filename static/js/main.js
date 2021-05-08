@@ -68,73 +68,95 @@ d3.json("/graphsdata").then(data => {
 // donut chart
 var donutChart;
 
+var decade = ["180","181", "182", "183", "184","185","186","187","188","189","190","191", "192", "193", "194", "195","196","197", "198","199", "200","201"]
+const decadeLength = decade.length
+
+// Got code https://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
+var count = new Array(decadeLength).fill(0);
+
+var label = ["1800s","1810s", "1820s", "1830s", "1840s","1850s","1860s","1870s","1880s","1890s","1900s","1910s", "1920s", "1930s", "1940s", "1950s","1960s","1970s", "1980s","1990s", "2000s","2010s"]
+
+function sortYears(data) {
+  benji.json("/graphsdata", data => {
+    console.log(data);
+
+    var yearBuilt = data.map(data => data.yearbuilt);
+    console.log(yearBuilt);
+
+    yearBuilt.forEach(row => {
+      
+      for (let i = 0; i < decadeLength; i++){
+
+        if(row.includes(decade[i]) ){
+          count[i] = count[i] + 1;
+        }
+    }
+    
+  });
+
+    console.log(decade);
+    console.log(count);
+});
+}
+
+function drawingDonutChart() {
+  
+  // Set ups the data for donut chart (outline based of https://www.chartjs.org/docs/latest/charts/doughnut.html and https://www.chartjs.org/docs/latest/samples/other-charts/doughnut.html)
+  const graphData = {
+    labels: label,
+    datasets: [{
+      label: 'Dataset',
+      data: count,
+      backgroundColor: [
+        'rgb(255, 153, 255)',
+        'rgb(153, 255, 255)',
+        'rgb(153, 255, 153)',
+        'rgb(255, 204, 153)'
+      ],
+      hoverOffset: 4
+    }]
+  };
+
+  const config = {
+    type: 'doughnut',
+    data: graphData,
+    options: {
+        responsive: true,
+        plugins: {
+            legend:{
+                position: 'top',
+            },
+            title: {
+                display: true,
+                text: 'Year Houses are Built'
+            }
+        }
+    }
+  };
+
+  // Creates the donut chart (code from https://www.chartjs.org/docs/latest/getting-started/)
+  var myChart = new Chart(document.getElementById('myChart'),config);
+
+  donutChart = myChart;
+}
+
 function initDonut(){
   var donutGraph = d3.select("#donut");
 
     benji.json("/graphsdata", data => {
-      console.log(data);
-
-  var yearBuilt = data.map(data => +data.yearbuilt);
-      console.log(yearBuilt);
-
-      // Got code from https://stackoverflow.com/questions/52711740/group-array-and-get-count
-      const input = yearBuilt;
-      const result = input.reduce((total, value) => {
-           total[value] = (total[value] || 0) + 1;
-           return total;}, {});
-      //console.log(result);
-
-      var keys = Object.keys(result);
-      //console.log(keys);
-
-      var values = Object.values(result);
-      //console.log(values);
+      // console.log(data);
      
+    sortYears();
 
-      // Set ups the data for donut chart (outline based of https://www.chartjs.org/docs/latest/charts/doughnut.html and https://www.chartjs.org/docs/latest/samples/other-charts/doughnut.html)
-      const graphData = {
-        labels: keys,
-        datasets: [{
-          label: 'Dataset',
-          data: values,
-          backgroundColor: [
-            'rgb(255, 153, 255)',
-            'rgb(153, 255, 255)',
-            'rgb(153, 255, 153)',
-            'rgb(255, 204, 153)'
-          ],
-          hoverOffset: 4
-        }]
-      };
-
-      const config = {
-        type: 'doughnut',
-        data: graphData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend:{
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Year Houses are Built'
-                }
-            }
-        }
-      };
-
-      // Creates the donut chart (code from https://www.chartjs.org/docs/latest/getting-started/)
-      var myChart = new Chart(document.getElementById('myChart'),config);
-
-      donutChart = myChart;
+    drawingDonutChart();
+    
 });
 }
 
 initDonut();
 
 
-function CreateDonutChart(ST) {
+function redrawDonut(ST) {
   console.log(`User selected ${ST}`);
 
   var donutGraph = d3.select("#donut");
@@ -151,60 +173,10 @@ function CreateDonutChart(ST) {
       var yearBuilt = yearBuiltArray.map(data => +data.yearbuilt);
       console.log(yearBuilt);
 
-      // Got code from https://stackoverflow.com/questions/52711740/group-array-and-get-count
-      const input = yearBuilt;
-      const result = input.reduce((total, value) => {
-           total[value] = (total[value] || 0) + 1;
-           return total;}, {});
-      //console.log(result);
-
-      var keys = Object.keys(result);
-      //console.log(keys);
-
-      var values = Object.values(result);
-      //console.log(values);
-     
-
-      // Set ups the data for donut chart (outline based of https://www.chartjs.org/docs/latest/charts/doughnut.html and https://www.chartjs.org/docs/latest/samples/other-charts/doughnut.html)
-      const graphData = {
-        labels: keys,
-        datasets: [{
-          label: 'Dataset',
-          data: values,
-          backgroundColor: [
-            'rgb(255, 153, 255)',
-            'rgb(153, 255, 255)',
-            'rgb(153, 255, 153)',
-            'rgb(255, 204, 153)'
-          ],
-          hoverOffset: 4
-        }]
-      };
-
-      const config = {
-        type: 'doughnut',
-        data: graphData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend:{
-                    position: 'top',
-                },
-                title: {
-                    display: true,
-                    text: 'Year Houses are Built'
-                }
-            }
-        }
-      };
-
-      // Creates the donut chart (code from https://www.chartjs.org/docs/latest/getting-started/)
-      var myChart = new Chart(document.getElementById('myChart'),config);
-
-      donutChart = myChart;
+      sortYears();
+      drawingDonutChart();
     });
 }
-
 
 
 // dropdown for states map and graphs
