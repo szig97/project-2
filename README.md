@@ -21,7 +21,7 @@ The 2019 Trulia Real Estate Dashboard explores the distribution of real estate s
 
 # How to Set Up the Leaflet Map:
 1. Navigate to the static folder and select the 'js' folder.
-2. in the js folder, create a file call 'config.js'. In this file, write down your API_KEY from mapbox.com so that the leaflet map can run.
+2. In the js folder, create a file call 'config.js'. In this file, write down your API_KEY from mapbox.com so that the leaflet map can run.
 
 # How to Run the Flask:
 1. At the base level in the 'trulia-real-estate' repository, create a config.py that contains your pgAdmin password, username, localhost, and port
