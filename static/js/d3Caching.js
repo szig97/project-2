@@ -58,11 +58,11 @@
 
 			//execute request and handle the queue
 			d3Func(url).then(data => {
-				functionQueue.forEach(callback => callback(data));
 				urlMap.set(url, {
 					status: COMPLETE_STATUS,
 					data: data,
 				});
+				functionQueue.forEach(callback => callback(data));
 			});
 		}
 

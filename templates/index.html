@@ -13,6 +13,13 @@
     crossorigin="" />
         <!-- Our CSS -->
     <link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+    <!-- ==================================================== -->
+        <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Supplied to us by fellow student Matt Killeen to help scale map to size of container -->
+    <!-- ======================================================== -->
+
 </head>
 
 <body>
@@ -30,11 +37,11 @@
             <div class="col-md-3">
                 <div class="well">
                     <h3>Project Description</h3>
-                    <p>This project explores the distribution of house sales in the US listed on Trulia during September
-                        2019 to October 2019.
-                        The national map displays house prices, square footage, # of Beds and Baths.
-                        When exploring each state's house sales, find the distribution of when houses were built and the
-                        correlation between square footage and house price.
+                    <p>The 2019 Trulia Real Estate Dashboard explores the distribution of real estate sales in the United States listed on Trulia.com.
+                         The data comes from the period between September 1st, 2019 and October 31st, 2019. 
+                         The national map displays the price, square feet, and the number of beds and baths in each unit. 
+                         In addition, there is a bar graph that explores which unit size is the most popular,
+                         and a donut graph that shows the distribution of units that were built in each decade after 1900.
                     </p>
                     <br>
                     <h3>Pick a State</h3>
@@ -53,14 +60,14 @@
 
             <div class="col-md-6">
                 <div class="well">
-                    <h5>Line</h5>
+                    <h5>Bar Graph</h5>
                     <div id="line"></div>
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="well">
-                    <h5>Donut</h5>
+                    <h5>Donut Graph</h5>
                     <div id="donut">
                         <canvas id="myChart"></canvas>
                     </div>
