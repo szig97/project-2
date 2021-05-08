@@ -20,11 +20,11 @@ function buildMapContianer() {
 
     var aPriceLayer;
 
-    var aFootLayer
+    var aFootLayer;
 
     var circleMapBox;
 
-    function buildMap(baths, beds, price, ft,  STData = null) {
+    function buildMap(baths, beds, price, ft, STData = null) {
 
         console.log(STData);
 
@@ -64,6 +64,7 @@ function buildMapContianer() {
             aController = L.control.layers(circleMapBox, null, { collapsed: false });
             aController.addTo(leafMap);
 
+
         } else {
 
             var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -95,7 +96,7 @@ function buildMapContianer() {
             aController = L.control.layers(circleMapBox, null, { collapsed: false });
             aController.addTo(leafMap);
 
-            console.log(typeof (leafMap));
+            // console.log(typeof (leafMap));
         }
 
 
@@ -114,7 +115,7 @@ var buildMap = buildMapContianer();
 // Start Where Circle Layers Are Drawn and Built
 
 function createMarkers(gData, STData = null) {
-     
+
     console.log('STData');
     console.log(STData);
     // =====================================
@@ -142,9 +143,12 @@ function createMarkers(gData, STData = null) {
         // adds flavor to sqrft
         let sqrftString = `${numberWithCommas(Korn.sqrft)}sq ft`;
 
+        // round year built so there is not .0 at the end
+        let yrString = `${Math.round(Korn.yearbuilt)}`
+
         // compiles html string that will one day populate the popups
-        const htmlString = ('<h6>' + Korn.address + '</h6><p>Price: ' + priceString + 
-            '</p><p>Sqrft: ' + sqrftString + '</p><p>Beds: ' + Korn.beds + '</p><p>Baths: ' + Korn.bath + '</p>');
+        const htmlString = ('<h6>' + Korn.address + '</h6><p>Price: ' + priceString +
+            '</p><p>Sqrft: ' + sqrftString + '</p><p>Beds: ' + Korn.beds + '</p><p>Baths: ' + Korn.bath + '</p><p>Year Built: ' + yrString + '</p>');
 
         return htmlString;
     }
@@ -155,7 +159,7 @@ function createMarkers(gData, STData = null) {
 
         if (STData !== null && STData.state !== 'USA') {
             // if the map is zoomed in on a state the circles will have larger radii
-            return 2 * room;
+            return 2.5 * room;
         } else {
             // and if the map is zoomed out on the whole country they are smaller
             return 1 * room;
@@ -166,21 +170,34 @@ function createMarkers(gData, STData = null) {
     function scalePrice(money) {
         if (STData !== null && STData.state !== 'USA') {
             // if the map is zoomed in on a state the circles will have larger radii
-            return Math.sqrt(money) * 4;
+            return Math.sqrt(money) / 12500;
         } else {
             // and if the map is zoomed out on the whole country they are smaller
-            return Math.sqrt(money) * 1.5;
+            return Math.sqrt(money) / 21000;
         }
     }
 
     // this is the scale for Sqr Ft (work in progress)
     function scaleFt(ft) {
+
+        ft = +ft;
+
+        if (ft > 10000) {
+            ft = 10000;
+        }
+
+        let ftPlus;
+
         if (STData !== null && STData.state !== 'USA') {
             // if the map is zoomed in on a state the circles will have larger radii
-            return Math.sqrt(ft) * 4;
+            // return Math.sqrt(ft) / 50;
+            ftPlus = (ft + 1000) / 500;
+            return ftPlus;
         } else {
             // and if the map is zoomed out on the whole country they are smaller
-            return Math.sqrt(ft) * 2;
+            // return Math.sqrt(ft) / 100;
+            ftPlus = ft / 2000;
+            return ftPlus;
         }
     }
 
@@ -204,19 +221,20 @@ function createMarkers(gData, STData = null) {
     // --------------------------
 
     // ==========================================
-    function magicLayer(color, scale, tran, pop, gData, STData) {
-        /**
-         * This Function Builds a Circle Layer.
-         * 
-         * @param   {string}      color     Changes the fill and Color of the circles.
-         * @param   {function}    scale     A function the scales the radii of the circles based on given value.
-         * @param   {number}      tran      Affects the Opacity of the circle.
-         * @param   {function}    pop       A function that creates the string that goes into the popup.
-         * @param   {json}        gData     The data for which the circles are plotted from.
-         * @param   {object}      STData    If not null it is just info on the state the map is zoom in on.
-         * 
-         * @return  {object}      The layer of Circles that can be put into the map building function.
-         */
+    /**
+     * This Function Builds a Circle Layer.
+     * 
+     * @param   {string}      color     Changes the fill and Color of the circles.
+     * @param   {function}    scale     A function the scales the radii of the circles based on given value.
+     * @param   {number}      tran      Affects the Opacity of the circle.
+     * @param   {function}    pop       A function that creates the string that goes into the popup.
+     * @param   {json}        gData     The data for which the circles are plotted from.
+     * @param   {object}      STData    If not null it is just info on the state the map is zoom in on.
+     * 
+     * @return  {object}      The layer of Circles that can be put into the map building function.
+     */
+    function magicLayer(lay, color, scale, tran, pop, gData, STData) {
+
 
         // this is where individual circles will be pushed
         let dots = [];
@@ -227,16 +245,16 @@ function createMarkers(gData, STData = null) {
             let dot = L.circleMarker([current.latitude, current.longitude], {
                 color: color,
                 fillColor: color,
-                radius: scale(current.beds),
+                radius: scale(current[lay]),
                 fillOpacity: tran,
                 opacity: tran
             });
-    
+
             // If the map is not currently zoomed on full USA there will be Popups
             if (STData !== null && STData.state !== 'USA') {
                 dot.bindPopup(pop(current));
             }
-    
+
             // pushing circles to array of circles
             dots.push(dot);
         }
@@ -253,17 +271,16 @@ function createMarkers(gData, STData = null) {
     // Using magicLayer function to make Layers
 
     // circles for Beds
-    let bedCircleLayer = magicLayer(bedColor, scaleBedBath, transparency, Popcorn, gData, STData);
-           
-    // circles for Baths
+    let bedCircleLayer = magicLayer('beds', bedColor, scaleBedBath, transparency, Popcorn, gData, STData);
 
-    let bathCircleLayer = magicLayer(bathColor, scaleBedBath, transparency, Popcorn, gData, STData);
+    // circles for Baths
+    let bathCircleLayer = magicLayer('bath', bathColor, scaleBedBath, transparency, Popcorn, gData, STData);
 
     // circles for Price
-    let priceCircleLayer = magicLayer(priceColor, scalePrice, transparency, Popcorn, gData, STData);
+    let priceCircleLayer = magicLayer('price', priceColor, scalePrice, transparency, Popcorn, gData, STData);
 
     // circles for SqrFt
-    let ftCircleLayer = magicLayer(ftColor, scaleFt, transparency, Popcorn, gData, STData);
+    let ftCircleLayer = magicLayer('sqrft', ftColor, scaleFt, transparency, Popcorn, gData, STData);
 
     // ================================================
 
@@ -288,6 +305,8 @@ function initMap() {
 
         // passing data into functions to build map
         createMarkers(gData);
+
+        console.log(d3.extent(gData.map(d => d.sqrft)));
 
         // just a message to let me know we are at the end of the process
         console.log('Mapped');
@@ -316,14 +335,14 @@ function reMap(ST) {
 
             // declaring a varaible to hold filtered sData
             // initialing it holds data on USA
-            let filtsData = 
-                {
-                    latitude: 37.0902, 
-                    longitude: -95.7129,
-                    name: 'United States of America',
-                    state: 'USA',
-                    zoomin: 4
-                };
+            let filtsData =
+            {
+                latitude: 37.0902,
+                longitude: -95.7129,
+                name: 'United States of America',
+                state: 'USA',
+                zoomin: 4
+            };
 
             if (ST === 'USA') {
                 // if the selected value is USA I don't filter the data
