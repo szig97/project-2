@@ -2,9 +2,16 @@ console.log("main.js loaded");
 
 // line graph
 
+// ==========================
+// Andy Wrote This
+let lineSelected = d3.select('#line');
+let lineSelectedWidth = lineSelected.property('offsetWidth');
+console.log(lineSelectedWidth);
+// ==========================
+
 // Setting variable for line grapgh height and width
-var lineHeight = 500;
-var lineWidth = 600;
+var lineHeight = 5 * lineWidth / 6;
+var lineWidth = lineSelectedWidth;
 
 // Append line graph
 var linegraph = d3.select("#line")
@@ -36,24 +43,26 @@ d3.json("/graphsdata").then(data => {
   var y4 = data.filter(data => (data.sqrft > 2000 && data.sqrft <= 2500));
   var y5 = data.filter(data => (data.sqrft > 2500 && data.sqrft <= 3000));
   var y6 = data.filter(data => (data.sqrft > 3000));
-  
-  var y = [y1.length, y2.length, y3.length, y4.length, y5.length, y6.length];
-  var x = [1000, 1500, 2000, 2500, 3000, 10000];
 
-  console.log("looking at y");
-  console.log(y);
+  var xaxis = [y1.length, y2.length, y3.length, y4.length, y5.length, y6.length];
 
   var trace1 = {
-    // nbinsx: x.length, 
-    // xbins: { size: 1000 }, 
-    // x: x,
-    y: y, 
-    type: "bar"
+    type: "bar",
+    y: xaxis,
+    x: ["-1000", "1001-1500", "1501-2000", "2001-2500", "2501-3000", "3000+"],
+    tickangle: 90
   };
 
-  var data1 = [trace1];  
+  var layout = {
+    title: 'Popular house sizes',
 
-  Plotly.newPlot('line', data1);
+    // xaxis_title="X Axis Title",
+    // yaxis_title="Y Axis Title",
+  };
+
+  var data1 = [trace1];
+
+  Plotly.newPlot('line', data1, layout);
 });
 
 // donut chart
@@ -130,6 +139,7 @@ function CreateDonutChart(ST) {
 
   var donutGraph = d3.select("#donut");
 
+
   donutChart.destroy();
 
     benji.json("/graphsdata", data => {
@@ -200,33 +210,33 @@ function CreateDonutChart(ST) {
 // dropdown for states map and graphs
 
 function InitDashboard() {
-    console.log("InitDashboard()");
+  console.log("InitDashboard()");
 
-    // Populate Dropdown Menu
-    var selector = d3.select("#selState");
+  // Populate Dropdown Menu
+  var selector = d3.select("#selState");
 
-    benji.json("/graphsdata", data => {
-        console.log(data);
+  benji.json("/graphsdata", data => {
+    console.log(data);
 
-        var sampleState = [...new Set(data.map(data => data.state))];
-        sampleState.sort();
-        console.log(sampleState);
+    var sampleState = [...new Set(data.map(data => data.state))];
+    sampleState.sort();
+    console.log(sampleState);
 
-        // ================================
-        // Andy Wrote this
-        selector.append('option')
-            .text('USA')
-            .property('value', 'USA');
-        // ================================
+    // ================================
+    // Andy Wrote this
+    selector.append('option')
+      .text('USA')
+      .property('value', 'USA');
+    // ================================
 
-        sampleState.forEach(sampleId => {
-            selector.append("option")
-                .text(sampleId)
-                .property("value", sampleId);
-        });
+    sampleState.forEach(sampleId => {
+      selector.append("option")
+        .text(sampleId)
+        .property("value", sampleId);
+    });
 
-        var id = sampleState[0];
-    }); 
+    var id = sampleState[0];
+  });
 }
 
 InitDashboard();
