@@ -1,3 +1,6 @@
+-- ===========================================
+-- Written by Sam Ziegler
+-- ===========================================
 -- Create Tables
 create table trulia_real_estate (
 id text primary key,
