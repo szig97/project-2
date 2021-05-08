@@ -414,6 +414,7 @@ function reMap(ST) {
 function optionChanged(ST) {
     reMap(ST);
     redrawDonut(ST);
+    redrawBar(ST);
 }
 
 // End Change Handle
