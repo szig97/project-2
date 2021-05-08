@@ -1,15 +1,14 @@
 // leaflet map lives here
 console.log('leaf.js loaded');
 
-// var mapWidth = d3.select('.well').property('width');
-// var mapHeight = 3 * mapWidth / 4;
-// d3.select('#map').attr('width', mapWidth).attr('height', mapHeight);
-
 // ========================================
 // Start where the Map is built
 
-function buildMapContianer() {
+// This function (buildMapContainer) is a closure around buildmap.
+function buildMapContainer() {
 
+    // ------------------------------------------
+    // anchors that buildMaps can access over and over.
     var leafMap;
 
     var aController;
@@ -23,20 +22,22 @@ function buildMapContianer() {
     var aFootLayer;
 
     var circleMapBox;
+    // --------------------------------------------
 
     function buildMap(baths, beds, price, ft, STData = null) {
 
-        console.log(STData);
+        // console.log(STData);
 
         console.log('FT');
         console.log(ft);
 
         if (STData !== null) {
 
-            console.log(+STData.latitude);
-
+            // moving map and zooming in/out
             leafMap.setView(new L.LatLng(+STData.latitude, +STData.longitude), STData.zoomin);
 
+            // ---------------------------------
+            // destroying layers
             leafMap.removeControl(aController);
 
             leafMap.removeLayer(aBathLayer);
@@ -46,12 +47,18 @@ function buildMapContianer() {
             leafMap.removeLayer(aPriceLayer);
 
             leafMap.removeLayer(aFootLayer);
+            // --------------------------------
 
+            // ----------------------
+            // updating anchor layer
             aBathLayer = baths;
             aBedLayer = beds;
             aPriceLayer = price;
             aFootLayer = ft;
+            // ---------------------
 
+            // --------------------------
+            // re-adding layers
             leafMap.addLayer(baths);
 
             circleMapBox = {
@@ -63,10 +70,12 @@ function buildMapContianer() {
 
             aController = L.control.layers(circleMapBox, null, { collapsed: false });
             aController.addTo(leafMap);
+            // --------------------------
 
 
         } else {
 
+            // map tile layer
             var lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
                 attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
                 tileSize: 512,
@@ -75,12 +84,15 @@ function buildMapContianer() {
                 id: "mapbox/light-v10",
                 accessToken: API_KEY
             });
+
+            // creates map centered on center of USA, with layer of Baths
             leafMap = L.map("map", {
                 center: [37.0902, -95.7129],
                 zoom: 4,
                 layers: [lightmap, baths]
             });
 
+            // Layers to be put in control
             let circleMapBox = {
                 'Baths': baths,
                 'Beds': beds,
@@ -88,15 +100,19 @@ function buildMapContianer() {
                 'Sqr Ft': ft
             };
 
+            // -------------------------
+            // updating anchors
             aBathLayer = baths;
             aBedLayer = beds;
             aPriceLayer = price;
             aFootLayer = ft;
+            // -----------------------
 
+            // creating control
             aController = L.control.layers(circleMapBox, null, { collapsed: false });
+            // adding control
             aController.addTo(leafMap);
 
-            // console.log(typeof (leafMap));
         }
 
 
@@ -105,7 +121,7 @@ function buildMapContianer() {
     return buildMap;
 }
 
-var buildMap = buildMapContianer();
+var buildMap = buildMapContainer();
 
 // End where Map is built
 // ============================================================
@@ -116,8 +132,6 @@ var buildMap = buildMapContianer();
 
 function createMarkers(gData, STData = null) {
 
-    console.log('STData');
-    console.log(STData);
     // =====================================
     // Scalers and Variables
 
@@ -157,6 +171,13 @@ function createMarkers(gData, STData = null) {
     // this is the scale for bed and bath radii
     function scaleBedBath(room) {
 
+        // Doing this to make map easier to look at
+        // Still get the picture that there are a lot of rooms.
+        if (room > 10) {
+            room = 10;
+        }
+
+
         if (STData !== null && STData.state !== 'USA') {
             // if the map is zoomed in on a state the circles will have larger radii
             return 2.5 * room;
@@ -168,12 +189,21 @@ function createMarkers(gData, STData = null) {
 
     // this is the scale for price (work in progress)
     function scalePrice(money) {
+
+        money = +money;
+
+        // Doing this to make map easier to look at
+        // Still get the picture that it's expensive.
+        if (money > 1000000) {
+            money = 1000000;
+        }
+
         if (STData !== null && STData.state !== 'USA') {
             // if the map is zoomed in on a state the circles will have larger radii
-            return Math.sqrt(money) / 12500;
+            return (money + 100000) / 70000;
         } else {
             // and if the map is zoomed out on the whole country they are smaller
-            return Math.sqrt(money) / 21000;
+            return (money + 100000) / 200000;
         }
     }
 
@@ -182,6 +212,8 @@ function createMarkers(gData, STData = null) {
 
         ft = +ft;
 
+        // Doing this to make map easier to look at
+        // Still get the picture that there is a lot of space.
         if (ft > 10000) {
             ft = 10000;
         }
@@ -224,11 +256,12 @@ function createMarkers(gData, STData = null) {
     /**
      * This Function Builds a Circle Layer.
      * 
+     * @param   {string}      lay       The key that represents the the desired data to be plotted, surrounded in "".
      * @param   {string}      color     Changes the fill and Color of the circles.
      * @param   {function}    scale     A function the scales the radii of the circles based on given value.
      * @param   {number}      tran      Affects the Opacity of the circle.
      * @param   {function}    pop       A function that creates the string that goes into the popup.
-     * @param   {json}        gData     The data for which the circles are plotted from.
+     * @param   {object}      gData     The data for which the circles are plotted from.
      * @param   {object}      STData    If not null it is just info on the state the map is zoom in on.
      * 
      * @return  {object}      The layer of Circles that can be put into the map building function.
@@ -298,7 +331,7 @@ function createMarkers(gData, STData = null) {
 // This Function Initializes the Map
 function initMap() {
     benji.json('/graphsdata', gData => {
-        console.log(gData);
+        // console.log(gData);
 
         // // just renameing gData for some reason
         // filtData = gData;
