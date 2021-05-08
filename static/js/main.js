@@ -98,7 +98,7 @@ const decadeLength = decade.length
 // Got code https://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
 var count = new Array(decadeLength).fill(0);
 
-var label = ["1800s", "1810s", "1820s", "1830s", "1840s", "1850s", "1860s", "1870s", "1880s", "1890s", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"]
+var label = ["1800s", "1810s", "1820s", "1830s", "1840s", "1850s", "1860s", "1870s", "1880s", "1890s", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"];
 
 var colors = [
   'rgb(220, 20, 60)',
@@ -123,7 +123,7 @@ var colors = [
   'rgb(255, 204, 153)',
   'rgb(255, 153, 255)',
   'rgb(153, 255, 255)',
-]
+];
 
 
 // --------------------------------------
@@ -196,7 +196,7 @@ function drawingDonutChart() {
 
   donutChart = myChart;
 
-
+}
 // --------------------------------------
 
 function initDonut(){
