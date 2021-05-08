@@ -5,7 +5,7 @@ Group Members: Andy McRae, Anthony Njuguna, Jeannaej Yambing, Sam Ziegler
 The 2019 Trulia Real Estate Dashboard explores the distribution of real estate sales in the United States listed on Trulia.com. 
  The data comes from the period between September 1st, 2019 and October 31st, 2019. The national map displays the price, square feet, and the number of beds and baths in each unit. 
  In addition, there is a bar graph that explores which unit size is the most popular,
- and a donut graph that shows the distribution of units that were built in each decade after 1900
+ and a donut graph that shows the distribution of units that were built in each decade.
 
 # How to Populate the Database:
 1.	Clone the 'trulia-real-estate' repository onto your computer.
