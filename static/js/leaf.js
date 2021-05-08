@@ -1,4 +1,4 @@
-// leaflet map lives here
+// leaflet map lives here (Andy McRae)
 console.log('leaf.js loaded');
 
 // ========================================
