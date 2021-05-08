@@ -18,7 +18,7 @@ HTML (Jeannaej, Sam)
 5.	Run the create table code to create the 'trulia_real_estate' table. 
 6.	Run the create table code to create the 'locations' table.
 7.	Run `select * from trulia_real_estate` and `select * from locations` to ensure that the tables were created.
-8.	Open a Jupyter Notebook in the 'trulia-real-estate' repository. Create a text file called 'config.py.' In this file, save your pgAdmin password as 'password'.
+8.	Open a Jupyter Notebook in the 'trulia-real-estate' repository. Create a text file called 'config.py.' In this file, write down your pgAdmin password.
 9.	Open ‘real_estate_etl.ipynb.' and run all cells. 
 
 
