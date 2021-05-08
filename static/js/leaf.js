@@ -1,4 +1,4 @@
-// leaflet map lives here
+// leaflet map lives here (Andy McRae)
 console.log('leaf.js loaded');
 
 // ========================================
@@ -414,6 +414,7 @@ function reMap(ST) {
 function optionChanged(ST) {
     reMap(ST);
     redrawDonut(ST);
+    redrawBar(ST);
 }
 
 // End Change Handle

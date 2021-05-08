@@ -1,6 +1,6 @@
 console.log("main.js loaded");
 
-// line graph
+// bar graph (Anthony Njuguna)
 
 // ==========================
 // Andy Wrote This
@@ -19,12 +19,28 @@ var linegraph = d3.select("#line")
   .attr("height", lineHeight)
   .attr("width", lineWidth);
 
-d3.json("/graphsdata").then(data => {
+function initBar() {
+  benji.json("/graphsdata", data => {
+    // console.log(data);
 
-  // d3.json("/graphsdata").then(function (data) {
+    DrawBar(data);
 
-  // view data on console
-  // console.log(data);
+  });
+}
+function redrawBar(ST) {
+  console.log(`User selected ${ST}`);
+
+
+  benji.json("/graphsdata", data => {
+    console.log(data);
+
+    var filteredData = data.filter(d => d.state === ST);
+    DrawBar(filteredData, ST);
+  });
+}
+
+
+function DrawBar(data, ST = null) {
 
   // Use the map method with the arrow function to return all the filtered sqrft.
   var sqrft = data.map(data => +(data.sqrft));
@@ -32,11 +48,8 @@ d3.json("/graphsdata").then(data => {
   // Use the map method with the arrow function to return all the filtered prices.
   var price = data.map(data => +(data.price));
 
-  // sort by sqrft
-
-  data.sort(function (a, b) { return a.sqrft - b.sqrft });
-  // console.log(data);
-
+  // data.sort(function (a, b) { return a.sqrft - b.sqrft });
+  
   var y1 = data.filter(data => (data.sqrft <= 1000));
   var y2 = data.filter(data => (data.sqrft > 1000 && data.sqrft <= 1500));
   var y3 = data.filter(data => (data.sqrft > 1500 && data.sqrft <= 2000));
@@ -53,8 +66,13 @@ d3.json("/graphsdata").then(data => {
     tickangle: 90
   };
 
+  if (ST !== null) {
+    aTitle = `Popular Unit Size for ${data[0].state}`;
+  } else {
+    aTitle = 'Popular Unit Size for USA';
+  }
   var layout = {
-    title: 'Popular house sizes',
+    title: aTitle,
 
     // xaxis_title="X Axis Title",
     // yaxis_title="Y Axis Title",
@@ -63,22 +81,24 @@ d3.json("/graphsdata").then(data => {
   var data1 = [trace1];
 
   Plotly.newPlot('line', data1, layout);
-});
+};
+
+initBar();
+
 
 
 // ========================================================
 
-// donut chart
-
+// donut chart (Jeannaej Yambing)
 var donutChart;
 
-var decade = ["180","181", "182", "183", "184","185","186","187","188","189","190","191", "192", "193", "194", "195","196","197", "198","199", "200","201"]
+var decade = ["180", "181", "182", "183", "184", "185", "186", "187", "188", "189", "190", "191", "192", "193", "194", "195", "196", "197", "198", "199", "200", "201"]
 const decadeLength = decade.length
 
 // Got code https://stackoverflow.com/questions/1295584/most-efficient-way-to-create-a-zero-filled-javascript-array
 var count = new Array(decadeLength).fill(0);
 
-var label = ["1800s","1810s", "1820s", "1830s", "1840s","1850s","1860s","1870s","1880s","1890s","1900s","1910s", "1920s", "1930s", "1940s", "1950s","1960s","1970s", "1980s","1990s", "2000s","2010s"]
+var label = ["1800s", "1810s", "1820s", "1830s", "1840s", "1850s", "1860s", "1870s", "1880s", "1890s", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"]
 
 var colors = [
   'rgb(220, 20, 60)',
@@ -117,12 +137,13 @@ function sortYears() {
     
     // Code help from Andy
     yearBuilt.forEach(row => {
-      
-      for (let i = 0; i < decadeLength; i++){
 
-        if(row.includes(decade[i]) ){
+      for (let i = 0; i < decadeLength; i++) {
+
+        if (row.includes(decade[i])) {
           count[i] = count[i] + 1;
         }
+
     }
     
   });
@@ -134,7 +155,7 @@ function sortYears() {
 // --------------------------------------
 
 function drawingDonutChart() {
-  
+
   // Set ups the data for donut chart (outline based of https://www.chartjs.org/docs/latest/charts/doughnut.html 
   // and https://www.chartjs.org/docs/latest/samples/other-charts/doughnut.html)
 
@@ -166,12 +187,14 @@ function drawingDonutChart() {
               display: true,
               text: `Decades Units were built`
           }
+
         }
+      }
     }
   };
 
   // Creates the donut chart (code from https://www.chartjs.org/docs/latest/getting-started/)
-  var myChart = new Chart(document.getElementById('myChart'),config);
+  var myChart = new Chart(document.getElementById('myChart'), config);
 
   donutChart = myChart;
 }
@@ -186,9 +209,10 @@ function initDonut(){
      
     sortYears(data);
 
+
     drawingDonutChart();
-    
-});
+
+  });
 }
 
 initDonut();
@@ -201,6 +225,7 @@ function redrawDonut(ST) {
   // var donutGraph = d3.select("#donut");
 
   donutChart.destroy();
+
 
     benji.json("/graphsdata", data => {
       //console.log(data);
@@ -234,7 +259,7 @@ function redrawDonut(ST) {
 }
 // ========================================================
 
-// dropdown for states map and graphs
+// dropdown for states map and graphs (Sam Ziegler)
 
 function InitDashboard() {
   console.log("InitDashboard()");
