@@ -1,6 +1,6 @@
 console.log("main.js loaded");
 
-// line graph
+// bar graph (Anthony Njuguna)
 
 // ==========================
 // Andy Wrote This
@@ -65,7 +65,7 @@ d3.json("/graphsdata").then(data => {
   Plotly.newPlot('line', data1, layout);
 });
 
-// donut chart
+// donut chart (Jeannaej Yambing)
 var donutChart;
 
 var decade = ["180","181", "182", "183", "184","185","186","187","188","189","190","191", "192", "193", "194", "195","196","197", "198","199", "200","201"]
@@ -179,7 +179,7 @@ function redrawDonut(ST) {
 }
 
 
-// dropdown for states map and graphs
+// dropdown for states map and graphs (Sam Ziegler)
 
 function InitDashboard() {
   console.log("InitDashboard()");
