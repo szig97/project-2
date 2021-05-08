@@ -50,7 +50,7 @@ def realestateRoute():
     results = session.query(table1.id, table1.price, table1.sqr_ft, table1.longitude, table1.latitude, table1.beds,
                             table1.bath, table1.year_built, table1.address, table1.city, table1.state, table1.zipcode).all()
     session.close()
-    print(results)
+    # print(results)
 
     # Create a list of dictionaries, with each dictionary containing one row from the query.
     graphsandmap = []
