@@ -7,7 +7,7 @@ The 2019 Trulia Real Estate Dashboard explores the distribution of real estate s
  In addition, there is a bar graph that explores which unit size is the most popular,
  and a donut graph that shows the distribution of units that were built in each decade after 1900
 
-# How to populate the database:
+# How to Populate the Database:
 1.	Clone the 'trulia-real-estate' repository onto your computer.
 2.	Open pgAdmin and create a new database called 'real_estate_db.'
 3.	Open a query tool in 'real_estate_db' and navigate to the ETL folder in the 'trulia-real-estate' repository.
@@ -19,11 +19,11 @@ The 2019 Trulia Real Estate Dashboard explores the distribution of real estate s
 9.  In the ETL folder, create a text file called 'config.py'. In this file, write down your pgAdmin password.
 10.	Open ‘real_estate_etl.ipynb.' and run all cells.
 
-# How to set up leaflet map
+# How to Set Up the Leaflet Map:
 1. Navigate to the static folder and select the 'js' folder.
 2. in the js folder, create a file call 'config.js'. In this file, write down your API_KEY from mapbox.com so that the leaflet map can run.
 
-# How to run the flask
+# How to Run the Flask:
 1. At the base level in the 'trulia-real-estate' repository, create a config.py that contains your pgAdmin password, username, localhost, and port
 2. Open GitBash in the 'trulia-real-estate' repository.
 3. In GitBash, write `source activate PythonData`
