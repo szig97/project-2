@@ -7,6 +7,28 @@
 
 /* Body */
 body{
-  background-color:darkblue;
+  background-color: teal;
 }
 
+/* div */
+div{
+  font: normal;
+}
+.well{
+  color:black;
+  background-color: rgb(194, 194, 194);
+}
+.col-md-12{
+  color:black;
+  background-color: rgb(194, 194, 194);
+}
+
+/* h4 */
+h4{
+  font-style: italic;
+}
+
+/* p */
+p{
+  font-style: oblique;
+}
