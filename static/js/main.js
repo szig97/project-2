@@ -91,8 +91,6 @@ function DrawBar(data, ST = null) {
 
 initBar();
 
-
-
 // ========================================================
 
 // donut chart (Jeannaej Yambing)
@@ -139,6 +137,8 @@ var colors = [
 
 // ==========================
 // Andy Wrote This Function
+// This function clears the count array to count the number of units in each decades
+
 function Zero(count) {
   const len = count.length;
   for (let i = 0; i < len; i++) {
@@ -146,14 +146,16 @@ function Zero(count) {
   }
   return count;
 }
+
 // ==========================
+// This function sorts the Year the units were built and gets the count for each decade
 
 function sortYears() {
   benji.json("/graphsdata", data => {
     //console.log(data);
 
     var yearBuilt = data.map(data => data.yearbuilt);
-    console.log(yearBuilt);
+    // console.log(yearBuilt);
     
     // Code help from Andy
     yearBuilt.forEach(row => {
@@ -166,11 +168,12 @@ function sortYears() {
     }
   });
     // console.log(decade);
-     console.log(count);
+    //console.log(count);
 });
 }
 
 // --------------------------------------
+// This function takes the count array and puts it into the template for creating a Donut Chart with Chart.js
 
 function drawingDonutChart() {
 
@@ -208,12 +211,12 @@ function drawingDonutChart() {
   var myChart = new Chart(document.getElementById('myChart'), config);
 
   donutChart = myChart;
-
 }
+
 // --------------------------------------
+// This function creates the initial donut chart with all the USA data
 
 function initDonut(){
-  // var donutGraph = d3.select("#donut");
 
     benji.json("/graphsdata", data => {
       // console.log(data);
@@ -227,14 +230,13 @@ function initDonut(){
 initDonut();
 
 // --------------------------------------
+// This function deletes existing chart and redraws a new chart with given State
 
 function redrawDonut(ST) {
-  console.log(`User selected ${ST}`);
 
-  // var donutGraph = d3.select("#donut");
+  // Destroys the Canvas that holds the donut chart
 
   donutChart.destroy();
-
 
     benji.json("/graphsdata", data => {
       //console.log(data);
@@ -244,16 +246,18 @@ function redrawDonut(ST) {
 
         initDonut();
 
+        console.log(`Donut Chart Redrawn for USA`);
       }
 
       else{
       
       Zero(count);
+
       var yearBuiltArray = data.filter(data => data.state === ST); 
-      console.log(yearBuiltArray);
+      // console.log(yearBuiltArray);
 
       var yearBuilt = yearBuiltArray.map(data => data.yearbuilt);
-      console.log(yearBuilt);
+      // console.log(yearBuilt);
 
       yearBuilt.forEach(row => {
       
@@ -263,14 +267,17 @@ function redrawDonut(ST) {
             count[i] = count[i] + 1;
           }
       }
+
+      });
+
+      // console.log(count);
+      drawingDonutChart();
+      console.log(`Donut Chart Redrawn for ${ST}`);
+      }
       
     });
-      console.log(count);
-      drawingDonutChart();
-      }
-
-    });
 }
+
 // ========================================================
 
 // dropdown for states map and graphs (Sam Ziegler)
