@@ -34,7 +34,13 @@ function redrawBar(ST) {
   benji.json("/graphsdata", data => {
     console.log(data);
 
-    var filteredData = data.filter(d => d.state === ST);
+    var filteredData;
+    if (ST === 'USA') {
+      filteredData = data;
+    } else {
+      var filteredData = data.filter(d => d.state === ST);
+    }
+
     DrawBar(filteredData, ST);
   });
 }
@@ -66,7 +72,7 @@ function DrawBar(data, ST = null) {
     tickangle: 90
   };
 
-  if (ST !== null) {
+  if (ST !== null && ST !== 'USA') {
     aTitle = `Popular Unit Size for ${data[0].state}`;
   } else {
     aTitle = 'Popular Unit Size for USA';
