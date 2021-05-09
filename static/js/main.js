@@ -107,32 +107,46 @@ var count = new Array(decadeLength).fill(0);
 var label = ["1800s", "1810s", "1820s", "1830s", "1840s", "1850s", "1860s", "1870s", "1880s", "1890s", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s"];
 
 var colors = [
-  'rgb(220, 20, 60)',
-  'rgb(205,92,92)',
-  'rgb(255,260,122)',
-  'rgb(255,165,0)',
-  'rgb(240,230,140)',
-  'rgb(154,205,50)',
-  'rgb(107,142,35)',
-  'rgb(50,205,50)',
-  'rgb(255, 153, 255)',
-  'rgb(153, 255, 255)',
-  'rgb(153, 255, 153)',
-  'rgb(255, 204, 153)',
-  'rgb(255, 153, 255)',
-  'rgb(153, 255, 255)',
-  'rgb(153, 255, 153)',
-  'rgb(255, 204, 153)',
-  'rgb(255, 153, 255)',
-  'rgb(153, 255, 255)',
-  'rgb(153, 255, 153)',
-  'rgb(255, 204, 153)',
-  'rgb(255, 153, 255)',
-  'rgb(153, 255, 255)',
+  'rgb(232, 73, 71)',
+  'rgb(223, 71, 87)',
+  'rgb(255, 85, 94)',
+  'rgb(214, 107, 103)',
+
+  'rgb(239, 164, 58)',
+  'rgb(232, 140, 84)',
+  'rgb(255, 134, 80)',
+  'rgb(222, 150, 93)',
+
+  'rgb(244, 224, 43)',
+  'rgb(248, 232, 70)',
+  'rgb(255, 233, 129)',
+  'rgb(236, 231, 136)',
+
+  'rgb(139, 201, 11)',
+  'rgb(100, 216, 127)',
+  'rgb(139, 241, 139)',
+  'rgb(181, 219, 127)',
+
+  'rgb(57, 167, 222)',
+  'rgb(83, 146, 210)',
+  'rgb(131, 178, 255)',
+  'rgb(142, 205, 210)',
+
+  'rgb(95, 68, 147)',
+  'rgb(97, 68, 208)',
+  
 ];
 
-
-// --------------------------------------
+// ==========================
+// Andy Wrote This Function
+function Zero(count) {
+  const len = count.length;
+  for (let i = 0; i < len; i++) {
+      count[i] = 0;
+  }
+  return count;
+}
+// ==========================
 
 function sortYears() {
   benji.json("/graphsdata", data => {
@@ -149,9 +163,7 @@ function sortYears() {
         if (row.includes(decade[i])) {
           count[i] = count[i] + 1;
         }
-
     }
-    
   });
     // console.log(decade);
      console.log(count);
@@ -170,12 +182,7 @@ function drawingDonutChart() {
     datasets: [{
       label: 'Dataset',
       data: count,
-      backgroundColor: [
-        'rgb(255, 153, 255)',
-        'rgb(153, 255, 255)',
-        'rgb(153, 255, 153)',
-        'rgb(255, 204, 153)'
-      ],
+      backgroundColor: colors,
       hoverOffset: 4
     }]
   };
@@ -212,8 +219,6 @@ function initDonut(){
       // console.log(data);
      
     sortYears(data);
-
-
     drawingDonutChart();
 
   });
@@ -235,10 +240,15 @@ function redrawDonut(ST) {
       //console.log(data);
       
       if (ST === "USA") {
+        Zero(count);
+
         initDonut();
+
       }
 
       else{
+      
+      Zero(count);
       var yearBuiltArray = data.filter(data => data.state === ST); 
       console.log(yearBuiltArray);
 
@@ -255,7 +265,7 @@ function redrawDonut(ST) {
       }
       
     });
-    console.log(count);
+      console.log(count);
       drawingDonutChart();
       }
 
