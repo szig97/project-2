@@ -9,14 +9,14 @@ The 2019 Trulia Real Estate Dashboard explores the distribution of real estate s
 
 # How to Populate the Database:
 1.	Clone the 'trulia-real-estate' repository onto your computer.
-2.	Open pgAdmin and create a new database called 'real_estate_db.'
+2.	Open pgAdmin and create a new database called 'real_estate_db'.
 3.	Open a query tool in 'real_estate_db' and navigate to the ETL folder in the 'trulia-real-estate' repository.
-4.	Select the file 'queries.sql.'
+4.	Select the file 'queries.sql'.
 5.	Run the create table code to create the 'trulia_real_estate' table. 
 6.	Run the create table code to create the 'locations' table.
 7.	Run `select * from trulia_real_estate` and `select * from locations` to ensure that the tables were created.
 8.	Open a Jupyter Notebook in the 'trulia-real-estate' repository. 
-9.  In the ETL folder, create a text file called 'config.py'. In this file, write down your pgAdmin password.
+9.  In the ETL folder, create a text file called 'config.py'. In this file, write down your pgAdmin username, password, localhost, and port.
 10.	Open ‘real_estate_etl.ipynb.' and run all cells.
 
 # How to Set Up the Leaflet Map:
@@ -24,9 +24,9 @@ The 2019 Trulia Real Estate Dashboard explores the distribution of real estate s
 2. In the js folder, create a file called 'config.js'. In this file, write down your API_KEY from mapbox.com so that the leaflet map can run.
 
 # How to Run the Flask:
-1. At the base level in the 'trulia-real-estate' repository, create a config.py that contains your pgAdmin password, username, localhost, and port
+1. At the base level in the 'trulia-real-estate' repository, create a config.py that contains your pgAdmin password, username, localhost, and port.
 2. Open GitBash in the 'trulia-real-estate' repository.
-3. In GitBash, write `source activate PythonData`
+3. In GitBash, write `source activate PythonData`.
 4. Write `python app.py` to get the flask running.
 5. In Google Chrome, write `http://127.0.0.1:5000/` and then you will have the Flask running. 
 
