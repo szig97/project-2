@@ -73,9 +73,9 @@ function DrawBar(data, ST = null) {
   };
 
   if (ST !== null && ST !== 'USA') {
-    aTitle = `Popular Unit Size for ${data[0].state}`;
+    aTitle = `Most Popular Unit Size for ${data[0].state}`;
   } else {
-    aTitle = 'Popular Unit Size for USA';
+    aTitle = 'Most Popular Unit Size for USA';
   }
   
   var data1 = [trace1];
@@ -83,7 +83,7 @@ function DrawBar(data, ST = null) {
   var layout = {
     title: aTitle,
     xaxis: { title: "Square Feet" },
-    yaxis: { title: "Number of properties"},
+    yaxis: { title: "Number of Properties"},
     
   };
 
