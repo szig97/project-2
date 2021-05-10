@@ -10,7 +10,7 @@ console.log(lineSelectedWidth);
 // ==========================
 
 // Setting variable for line grapgh height and width
-var lineHeight = 5 * lineWidth / 6;
+var lineHeight = 55 * lineWidth / 6;  
 var lineWidth = lineSelectedWidth;
 
 // Append line graph
@@ -63,13 +63,13 @@ function DrawBar(data, ST = null) {
   var y5 = data.filter(data => (data.sqrft > 2500 && data.sqrft <= 3000));
   var y6 = data.filter(data => (data.sqrft > 3000));
 
-  var xaxis = [y1.length, y2.length, y3.length, y4.length, y5.length, y6.length];
+  var y = [y1.length, y2.length, y3.length, y4.length, y5.length, y6.length];
 
   var trace1 = {
     type: "bar",
-    y: xaxis,
-    x: ["-1000", "1001-1500", "1501-2000", "2001-2500", "2501-3000", "3000+"],
-    tickangle: 90
+    y: y,
+    x: ["-1001", "1001-1500", "1501-2000", "2001-2500", "2501-3000", "3001+"],
+    
   };
 
   if (ST !== null && ST !== 'USA') {
@@ -77,14 +77,15 @@ function DrawBar(data, ST = null) {
   } else {
     aTitle = 'Popular Unit Size for USA';
   }
+  
+  var data1 = [trace1];
+
   var layout = {
     title: aTitle,
-
-    // xaxis_title="X Axis Title",
-    // yaxis_title="Y Axis Title",
+    xaxis: { title: "Square Feet" },
+    yaxis: { title: "Number of properties"},
+    
   };
-
-  var data1 = [trace1];
 
   Plotly.newPlot('line', data1, layout);
 };
