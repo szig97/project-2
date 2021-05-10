@@ -32,3 +32,9 @@ h4{
 p{
   font-style: oblique;
 }
+
+/* Links */
+.json {
+  color: black;
+  font-size: 11px;
+}
