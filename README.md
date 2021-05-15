@@ -1,4 +1,7 @@
 # 2019 Trulia Real Estate Dashboard
+
+![2019 trulia real estate dashboard](https://user-images.githubusercontent.com/73489414/118370635-2cf1b480-b56e-11eb-8469-9900671bd784.png)
+
 Group Members: Andy McRae, Anthony Njuguna, Jeannaej Yambing, Sam Ziegler
 
 # Overview:
